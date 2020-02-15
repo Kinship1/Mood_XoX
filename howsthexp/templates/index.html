@@ -1,0 +1,10 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<p> {{ song_nam }}</p>
+<audio controls="controls">
+  <source src="/static/{{ song_nam }}" type="audio/mpeg" />
+Your browser does not support the audio element.
+</audio>
+
+</html>

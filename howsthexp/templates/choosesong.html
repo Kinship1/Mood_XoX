@@ -1,0 +1,13 @@
+
+{% extends 'index.html' %}
+
+
+{% block content %}
+<div class="row">
+    {% for song in playlist %}
+        <a href="playlist/{{song.title}}/"><h3>{{song.title}} -- {{song.duration}}</h3></a>
+    {% endfor %}
+</div>
+
+{% endblock %}
+{% block form %}{% endblock %}

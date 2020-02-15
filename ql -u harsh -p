@@ -1,0 +1,10 @@
+[0;1;32m●[0m mysql.service - MySQL Community Server
+   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)
+   Active: [0;1;32mactive (running)[0m since Mon 2020-02-03 18:28:41 IST; 1min 35s ago
+ Main PID: 6444 (mysqld)
+    Tasks: 27 (limit: 4915)
+   CGroup: /system.slice/mysql.service
+           └─6444 /usr/sbin/mysqld --daemonize --pid-file=/run/mysqld/mysqld.pid
+
+Feb 03 18:28:39 harsh-laptop systemd[1]: Starting MySQL Community Server...
+Feb 03 18:28:41 harsh-laptop systemd[1]: Started MySQL Community Server.

@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class='row'>
+    {{link}}
+    <audio controls>
+        <source src="../../{{ link }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+{% endblock %}
