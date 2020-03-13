@@ -1,17 +1,43 @@
-import os
-import cv2
-import numpy as np
-from keras.models import model_from_json,load_model
+
+from os import listdir
+from os.path import join,isfile
 from keras.preprocessing import image
+from keras.models import load_model
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import cv2
+import math
+import imutils
 import time
 from collections import Counter
-#import playsound
-#import pygame
 
-model = model_from_json(open("fer.json","r").read())
-model.load_weights('fer.h5')
+model = load_model("model1_2_9.h5")
 
-# face_haar_cascade = cv2.CascadeClassifier('harcascade_frontalface_default.xml')
+test_dir = '/home/ekta3501/pyproject/dataset/images/test1/'
+
+model.compile(loss="mean_squared_error",
+            optimizer='rmsprop',
+            metrics=['accuracy']
+)
+
+onlyfiles = [f for f in listdir(test_dir) if isfile(join(test_dir, f))]
+print(onlyfiles)
+
+for files in onlyfiles:
+    img = image.load_img(test_dir+files,target_size=(48,48))
+    x = image.img_to_array(img)
+    x = np.expand_dims(x,axis=0)
+
+    images = np.vstack([x])
+    # plt.imshow(images)
+    classes = model.predict_classes(images,batch_size=3)
+    print(classes)
+    # classes = classes[0]
+
+
+
+face_haar_cascade = cv2.CascadeClassifier('harcascade_frontalface_default.xml')
 face_cascade=cv2.CascadeClassifier('harcascade_frontalface_default.xml')
 print(face_cascade)
 cap = cv2.VideoCapture(0)
@@ -35,12 +61,14 @@ while True:
         img_pixels = np.expand_dims(img_pixels,axis=0)
 
         img_pixels/=255
+        img_pixels = np.resize(img_pixels,(1,48,48,3))
+        print(img_pixels.shape)
 
         predictions = model.predict(img_pixels)
 
         max_index = np.argmax(predictions[0])
 
-        emotions = ('angry','disgust','fear','happy','sad','surprise','neutral')
+        emotions = ('happy','neutral','sad')
 
         predicted_emotion = emotions[max_index]
         print('predicted emotion',predicted_emotion)
@@ -56,10 +84,11 @@ while True:
     if cv2.waitKey(10) == ord('q'):
         break
 
-    elif i==60:
-        break
+    # elif i==60:
+    #     break
 
-# cv2.release()
+cap.release()
+cv2.destroyAllWindows()
 print(ls)
 # using Counter() + set() + list comprehension
 # list frequency of elements
@@ -71,9 +100,19 @@ print('your emotion is ',Keymax)
 cap.release()
 cv2.destroyAllWindows()
 # pygame.init()
+#
 # pygame.mixer.music.load('/home/ekta/pyproject/song.wav')
 # pygame.mixer.music.play()
 # time.sleep(100)
 # pygame.mixer.music.stop()
 
 # playsound.playsound('/home/ekta/pyproject/song.mp3', True)
+
+
+# from pygame import mixer  # Load the popular external library
+#
+# mixer.init()
+# mixer.music.load('/home/ekta/pyproject/song.mp3')
+# mixer.music.play()
+#
+# time.sleep(100)
