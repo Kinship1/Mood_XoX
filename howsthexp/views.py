@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse,reverse_lazy
 from howsthexp.models import Song,UserRegister
 from hashing import *
+import eyed3
+from predict import emotion_detect
 # Create your views here.
 def Index(request):
     # ansi = handsignal()
@@ -74,6 +76,36 @@ def Login(request):
 
 def Dashboard(request,user):
     if request.session.get('name') == user:
-        return render(request,'dashboard.html')
+        if request.method=='POST':
+            emotion = emotion_detect()
+            print("detected emotion {}".format(emotion))
+
+            return HttpResponseRedirect(reverse('play_song',args=(user,emotion,)))
+        context={
+        'username':user,
+        }
+        return render(request,'dashboard.html',context)
+
     else:
         return HttpResponseRedirect(reverse('login_user'))
+
+
+
+def Play(request,user,emotion):
+
+    print("emotion {}".format(emotion))
+    return render(request,'play_song.html')
+
+
+
+
+
+
+def Logout(request,user):
+    try:
+        del request.session['name']
+        print("user deleted")
+        print(request.session['name'])
+    except :
+          pass
+    return HttpResponseRedirect(reverse('login_user'))
