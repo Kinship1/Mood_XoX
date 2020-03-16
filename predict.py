@@ -14,91 +14,100 @@ from collections import Counter
 
 model = load_model("model1_2_9.h5")
 
-test_dir = '/home/ekta3501/pyproject/dataset/images/test1/'
+#test_dir = '/home/ekta3501/pyproject/dataset/images/test1/'
 
 model.compile(loss="mean_squared_error",
             optimizer='rmsprop',
             metrics=['accuracy']
 )
 
-onlyfiles = [f for f in listdir(test_dir) if isfile(join(test_dir, f))]
-print(onlyfiles)
+#onlyfiles = [f for f in listdir(test_dir) if isfile(join(test_dir, f))]
+#print(onlyfiles)
 
-for files in onlyfiles:
-    img = image.load_img(test_dir+files,target_size=(48,48))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x,axis=0)
+#for files in onlyfiles:
+ #   img = image.load_img(test_dir+files,target_size=(48,48))
+ #   x = image.img_to_array(img)
+  #  x = np.expand_dims(x,axis=0)
 
-    images = np.vstack([x])
+   # images = np.vstack([x])
     # plt.imshow(images)
-    classes = model.predict_classes(images,batch_size=3)
-    print(classes)
+    #classes = model.predict_classes(images,batch_size=3)
+    #print(classes)
     # classes = classes[0]
 
 
 
-face_haar_cascade = cv2.CascadeClassifier('harcascade_frontalface_default.xml')
-face_cascade=cv2.CascadeClassifier('harcascade_frontalface_default.xml')
-print(face_cascade)
-cap = cv2.VideoCapture(0)
-i=0
-ls=[]
-while True:
-    ret,test_img=cap.read()
-    if not ret:
-        continue
-    gray_img=cv2.cvtColor(test_img,cv2.COLOR_BGR2GRAY)
 
-    # faces_detected = face_cascade.detectMultiscale(gray_img,1.32,5)
-    faces_detected=face_cascade.detectMultiScale(gray_img,1.3,5)
-    for (x,y,w,h) in faces_detected:
-        cv2.rectangle(test_img,(x,y),(x+w,y+h),(255,0,0),thickness=7)
+def emotion_detect():
+    face_haar_cascade = cv2.CascadeClassifier('harcascade_frontalface_default.xml')
+    face_cascade=cv2.CascadeClassifier('harcascade_frontalface_default.xml')
+    print(face_cascade)
+    cap = cv2.VideoCapture(0)
+    i=0
+    ls=[]
+    while True:
+        ret,test_img=cap.read()
+        if not ret:
+            continue
+        gray_img=cv2.cvtColor(test_img,cv2.COLOR_BGR2GRAY)
 
-        roi_gray=gray_img[y:y+w,x:x+h]
-        roi_gray = cv2.resize(roi_gray,(48,48))
-        img_pixels = image.img_to_array(roi_gray)
+        # faces_detected = face_cascade.detectMultiscale(gray_img,1.32,5)
+        faces_detected=face_cascade.detectMultiScale(gray_img,1.3,5)
+        for (x,y,w,h) in faces_detected:
+            cv2.rectangle(test_img,(x,y),(x+w,y+h),(255,0,0),thickness=7)
 
-        img_pixels = np.expand_dims(img_pixels,axis=0)
+            roi_gray=gray_img[y:y+w,x:x+h]
+            roi_gray = cv2.resize(roi_gray,(48,48))
+            img_pixels = image.img_to_array(roi_gray)
 
-        img_pixels/=255
-        img_pixels = np.resize(img_pixels,(1,48,48,3))
-        print(img_pixels.shape)
+            img_pixels = np.expand_dims(img_pixels,axis=0)
 
-        predictions = model.predict(img_pixels)
+            img_pixels/=255
+            img_pixels = np.resize(img_pixels,(1,48,48,3))
+            print(img_pixels.shape)
 
-        max_index = np.argmax(predictions[0])
+            predictions = model.predict(img_pixels)
 
-        emotions = ('happy','neutral','sad')
+            max_index = np.argmax(predictions[0])
 
-        predicted_emotion = emotions[max_index]
-        print('predicted emotion',predicted_emotion)
-        if(i%5==0):
-            ls.append(predicted_emotion)
-        cv2.putText(test_img,predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+            emotions = ('happy','neutral','sad')
 
-    resized_img = cv2.resize(test_img, (1000, 700))
+            predicted_emotion = emotions[max_index]
+            print('predicted emotion',predicted_emotion)
+            if(i%5==0):
+                ls.append(predicted_emotion)
+            cv2.putText(test_img,predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
 
-    cv2.imshow('Facial emotion analysis ',resized_img)
-    i=i+1
+        resized_img = cv2.resize(test_img, (1000, 700))
 
-    if cv2.waitKey(10) == ord('q'):
-        break
+        cv2.imshow('Facial emotion analysis ',resized_img)
+        i=i+1
 
-    # elif i==60:
-    #     break
+        if cv2.waitKey(10) == ord('q'):
+            break
 
-cap.release()
-cv2.destroyAllWindows()
-print(ls)
-# using Counter() + set() + list comprehension
-# list frequency of elements
-res = dict(Counter(ls))
-print(res)
-Keymax = max(res, key=res.get)
-print('your emotion is ',Keymax)
+        # elif i==60:
+        #     break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
+    print(ls)
+    # using Counter() + set() + list comprehension
+    # list frequency of elements
+    res = dict(Counter(ls))
+    print(res)
+    Keymax = max(res, key=res.get)
+    print('your emotion is ',Keymax)
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    return Keymax
+
+
+
+
+
 # pygame.init()
 #
 # pygame.mixer.music.load('/home/ekta/pyproject/song.wav')
