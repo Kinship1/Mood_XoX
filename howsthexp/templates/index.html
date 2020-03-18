@@ -1,12 +1,83 @@
 {% load static %}
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
-    <title>Home page </title>
+  <link href="{% static 'css/musickicss.css' %}" rel="stylesheet" type="text/css"> 
+  <!-- <script src="{% static 'js/musickijs.js' %}" type="text/javascript"></script> -->
   </head>
-  <body>
-    This will be the index page 
-  </body>
+
+<body>
+  <img src="/static/image/cover.jpg"> </img>
+  <audio id="player"  ontimeupdate="updateBar(this)" autoplay src="/static/media/{{emotion}}/{{ song_name }}" type="audio/mpeg"  id="playerr"></audio>
+
+
+  
+    <div class="probar"><canvas id="progress" ></canvas></div>
+    <article>
+      <p> {{ emotion }}</p>
+      <p> {{ song_title }}</p>
+      
+      <!-- <input
+        type="range" 
+        id="progress-bar" 
+        min="0" 
+        max="" 
+        value="0" 
+        onchange="changeProgressBar()"
+        /> -->
+      
+          <br>
+          <span id="current-time"></span> /
+          <span id="duration"></span>
+          <br>
+
+
+        <script>
+          var canvasWidth = 400
+          var audioEl = document.getElementById("player")
+          var canvas = document.getElementById("progress").getContext('2d')
+          // var ctrl = document.getElementById('audioControl')
+
+          audioEl.addEventListener('loadedmetadata',function(){
+            var duration = audioEl.duration
+            var currentTime = audioEl.currentTime
+            document.getElementById('duration').innerHTML = convertElapsedTime(duration)
+            document.getElementById("current-time").innerHTML = convertElapsedTime(currentTime)
+            canvas.fillRect(0,0, canvasWidth,50);
+          });
+        </script>
+
+        
+        
+
+
+        <div>
+          <button class="circle" onclick="voldwn()"></button>
+          <button onclick="togglePlay() & removecls()" class="button pause" id="played"></button>
+          <!-- <button class="button pause hidden" onclick="pause()" id="paused"></button> -->
+          <button class="circle plus" onclick="volup()"></button>
+        </div> 
+        <script>
+          var myAudio = document.getElementById("player");
+          var isPlaying = false;
+
+          function togglePlay() {
+            if (isPlaying) {
+              myAudio.pause()
+            } else {
+              myAudio.play();
+            }
+          };
+          myAudio.onplaying = function() {
+            isPlaying = true;
+            document.getElementsByClassName("play").innerHTML.className = "pause";
+          };
+          myAudio.onpause = function() {
+            isPlaying = false;
+            document.getElementsByClassName("pause").innerHTML.className = "play"
+          };
+        </script>
+    </article>
+    <script src="{% static 'js/musickijs.js' %}" type="text/javascript"></script>
+</body>
 </html>

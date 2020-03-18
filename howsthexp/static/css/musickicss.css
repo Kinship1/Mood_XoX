@@ -1,0 +1,97 @@
+body {
+	background: #053150;
+  font-family: 'Lato';
+  /* background-image: url('/static/image/next.jpeg'); */
+}
+
+article{
+    position: absolute;
+    width: 600px;
+    height: 350px;
+    top: 40px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    padding: 50px 5%;
+    box-sizing: border-box;
+    box-shadow: 0 0 21px 0px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+
+.play{
+    box-sizing: border-box;
+    background-color:  #053150;;
+    width: 74px;
+    height: 74px;
+    border-style: solid;
+    border-width: 37px;
+    border-color: #202020;
+    border-width: 37px 0px 37px 74px;
+    border-color: transparent transparent transparent #202020;
+}
+
+.pause {
+    background-color:  #053150;
+    width: 90px;
+    height: 74px;
+    border-style: double;
+    border-width: 0px 0px 0px 37px;
+    border-color: #202020;
+  }
+
+  .circle {
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    background-color: #053150;
+    position: relative;
+    border-color: #202020;
+  }
+  .circle::after {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #202020;
+    height: 10px;
+    margin-top: -5px;
+    top: 50%;
+    left: 5px;
+    right: 5px;
+    z-index: 9;
+  }
+  .plus::before {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #202020;
+    width: 10px;
+    margin-left: -5px;
+    left: 50%;
+    top: 5px;
+    bottom: 5px;
+    z-index: 9;
+  }
+
+
+  #progress{
+    width: 603px;
+    height: 100px;
+    border-radius: 40px 30px 20px 10px;
+    position: relative;
+    
+    
+  }
+
+  .probar{
+    margin-top: 300px;
+    margin-left: 650px;
+
+  }
+/* 
+  p{
+    float: top;
+  }  */

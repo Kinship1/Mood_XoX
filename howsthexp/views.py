@@ -7,20 +7,56 @@ from django.urls import reverse,reverse_lazy
 from howsthexp.models import Song,UserRegister
 from hashing import *
 import eyed3
-from predict import emotion_detect
+import predict
+from os import listdir
 import keras.backend as K
 # Create your views here.
 def Index(request):
-    # ansi = handsignal()
-    # song_name = ['01 Ae Dil Hai Mushkil (Future Bass Remix By DJ Khushi) 190Kbps.mp3','01 Afghan Jalebi (Ya Baba) Phantom (Asrar n Pritam) 192Kbps.mp3','01 Chalti Hai Kya 9 Se 12 - Judwaa 2 - 190Kbps.mp3','01 - O Heeriye (Ayushmann Khurrana) - DownloadMing.SE.mp3',
-    #             '02 Haareya - Arijit Singh - 190Kbps.mp3'    ]
-    # context = {
-    #             'emotion' : "Arijit_Singh",
-    #             'song_nam': 'media/'+str(ansi)+'.mp3',
-    #             'range': ansi
-    #           }
-    # print(context['song_nam'])
-    return render(request, 'index.html')
+    ansi = predict.emotion_detect()
+    # ansi = random.choice(['sad','neutral','happy'])
+    songname = random.choice(listdir('howsthexp/static/media/'+ansi))
+    print(songname)
+    path = "howsthexp/static/media/"+ansi+"/"+songname
+    audiofile = eyed3.load(path)
+    # save("/static/image/coverart.jpg")
+
+    
+    # image = Image.frombytes("RGBA", (500, 500), audiofile.tag.images[0])
+    # b, g, r, _ = image.split()
+    # image = Image.merge("RGB", (r, g, b))
+
+    # image.save("/static/image/coverart.jpg")
+
+
+
+
+
+    # coverart.save("cover.jpg")
+    # release_group_ID = audiofile.tag.images[0]
+    # artwork = mb.get_release_group_image_front(release_group_ID)
+
+    # result_file = 'result_file'
+    # with open(result_file, 'wb') as file_handler:
+    #     file_handler.write(artwork)
+    # Image.open(result_file).save("/static/image/coverart" + '.jpg')
+    # os.remove(result_file)
+
+
+    # for kl in list(audiofile.tag.images.get(None)):
+    #   print(7,kl)
+    print(audiofile.tag.images[0],"Image Frame")
+    print( audiofile.tag.artist)
+    print( audiofile.tag.album)
+    print (audiofile.tag.title)
+    context = {
+                'emotion' : ansi,
+                'song_name': songname,
+                'song_title': audiofile.tag.title,
+                'artist': audiofile.tag.artist,
+                'coverart': audiofile.tag.images[0],
+                #'range': ansi
+              }
+    return render(request, 'index.html',context)
 
 
 
@@ -111,3 +147,17 @@ def Logout(request,user):
     except :
           pass
     return HttpResponseRedirect(reverse('login_user'))
+
+
+def Player(request):
+  ansi = predict.emotion_detect()
+  # ansi = random.choice(['sad','neutral','happy'])
+  songname = random.choice(listdir('howsthexp/static/media/'+ansi))
+  path = "howsthexp/static/media/"+ansi+"/"+songname
+  audiofile = eyed3.load(path)
+  context = {
+                'emotion' : ansi,
+                'song_name': songname
+                #'range': ansi
+              }
+  return render(request, 'musicplayer.html',context)

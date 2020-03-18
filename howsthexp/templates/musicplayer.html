@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music Player</title>
+    <link rel="stylesheet" href="{% static 'css/player.css' %}">
+</head>
+<body>
+    <img src="/static/image/lemonade.png" id="background" />
+    <audio src="/static/media/{{emotion}}/{{ song_name }}" id="song" autoplay></audio>
+
+    <div class="container">  
+        <div class="bo"></div>      
+        <img src="/static/image/lemonade.png" id="thumbnail" />
+        
+        <img src="/static/image/play.png" onclick="playPause()" id="play-pause" />
+        <img src="/static/image/forward.png" onclick="nextSong()" id="next-song" />
+        <img src="/static/image/backward.png" onclick="previousSong()" id="previous-song" />
+
+        <div class="song-artist">{{ artist }}</div>
+        <div class="song-title"> {{ song_name }}</div>
+
+        <!-- Input element for progress bar - min=0 starting value of every song - max length will change per song so leave empty -->
+        
+        <input 
+            type="range" 
+            id="progress-bar" 
+            min="0" 
+            max="" 
+            value="0" 
+            onchange="changeProgressBar()"
+        />
+
+        <div class="currentTime"></div>
+        <div class="durationTime"></div>
+    </div>
+
+    <script src="{% static 'js/player.js' %}"></script>
+</body>
+</html>
