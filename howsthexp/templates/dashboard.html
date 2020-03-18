@@ -3,8 +3,27 @@
   <head>
     <meta charset="utf-8">
     <title>Dashboard</title>
-  </head>
-  <body>
-    this will be the user dashboard
+  <script>
+if(!!window.performance && window.performance.navigation.type == 2)
+{
+    window.location.reload();
+}
+  </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+
+  <body onunload="">
+    this will be the {{ username }} dashboard
+
+    <br>
+    <!-- creating link for logout of user -->
+    <a href="{% url 'logout_user' username %}">Logout</a>
+    <form method="post">
+      {% csrf_token %}
+      <input type="submit" name="Check Mood" value="Check Mood">
+    </form>
+    <br>
   </body>
 </html>
