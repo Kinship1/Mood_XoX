@@ -11,8 +11,15 @@ import math
 import imutils
 import time
 from collections import Counter
+import tensorflow as tf
+from keras import backend as K
+import tensorflow as tf
+K.clear_session()
 
 model = load_model("model1_2_9.h5")
+# model._make_predict_function()
+graph1 = tf.get_default_graph()
+
 
 #test_dir = '/home/ekta3501/pyproject/dataset/images/test1/'
 
@@ -41,7 +48,8 @@ model.compile(loss="mean_squared_error",
 def emotion_detect():
     face_haar_cascade = cv2.CascadeClassifier('harcascade_frontalface_default.xml')
     face_cascade=cv2.CascadeClassifier('harcascade_frontalface_default.xml')
-    print(face_cascade)
+    # print(face_cascade)
+
     cap = cv2.VideoCapture(0)
     i=0
     ls=[]
@@ -66,7 +74,8 @@ def emotion_detect():
             img_pixels = np.resize(img_pixels,(1,48,48,3))
             print(img_pixels.shape)
 
-            predictions = model.predict(img_pixels)
+            with graph1.as_default():
+                predictions = model.predict(img_pixels)
 
             max_index = np.argmax(predictions[0])
 
@@ -98,9 +107,9 @@ def emotion_detect():
     print(res)
     Keymax = max(res, key=res.get)
     print('your emotion is ',Keymax)
-
-    cap.release()
-    cv2.destroyAllWindows()
+    #
+    # cap.release()
+    # cv2.destroyAllWindows()
 
     return Keymax
 

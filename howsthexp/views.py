@@ -8,6 +8,7 @@ from howsthexp.models import Song,UserRegister
 from hashing import *
 import eyed3
 from predict import emotion_detect
+import keras.backend as K
 # Create your views here.
 def Index(request):
     # ansi = handsignal()
@@ -78,6 +79,7 @@ def Dashboard(request,user):
     if request.session.get('name') == user:
         if request.method=='POST':
             emotion = emotion_detect()
+            K.clear_session()
             print("detected emotion {}".format(emotion))
 
             return HttpResponseRedirect(reverse('play_song',args=(user,emotion,)))

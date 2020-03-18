@@ -6,7 +6,7 @@ from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Conv2D,Flatten,Dense,Dropout,Dense,Activation,MaxPooling2D
 from keras.losses import categorical_crossentropy
-
+from keras import backend as K
 
 train_dir = '/home/ekta3501/pyproject/dataset/images/train'
 
@@ -17,7 +17,6 @@ SAMPLES = 394*3
 EPOCHS = 30
 BATCH_SIZE =5
 INPUT_SHAPE = (HEIGHT,WIDTH,3)
-
 
 #creating first layer
 model = Sequential()
